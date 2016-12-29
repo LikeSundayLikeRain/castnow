@@ -1,5 +1,23 @@
 #!/usr/bin/env node
 
+var debug = require('debug')('castnow');
+var cors_proxy = require('cors-anywhere');
+var internalIp = require('internal-ip');
+var path = process.argv[2];
+if (!!path && path.includes('http')) {
+	var ip = internalIp();
+	var port = 4321;
+	cors_proxy.createServer({
+		originWhitelist: [], // Allow all origins 
+		// requireHeader: ['origin', 'x-requested-with'],
+		removeHeaders: ['cookie', 'cookie2']
+	}).listen(port, function() {
+		console.log('Running CORS Anywhere on ' + ':' + port);
+	});
+	debug('started webserver for CORS on address %s using port %s', ip, port);
+	process.argv[2]='http://' + ip + ':' + port + '/'+ path;
+}
+
 var player = require('chromecast-player')();
 var opts = require('minimist')(process.argv.slice(2));
 var chalk = require('chalk');
@@ -9,7 +27,6 @@ var circulate = require('array-loop');
 var xtend = require('xtend');
 var shuffle = require('array-shuffle');
 var unformatTime = require('./utils/unformat-time');
-var debug = require('debug')('castnow');
 var debouncedSeeker = require('debounced-seeker');
 var noop = function() {};
 
