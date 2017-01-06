@@ -40,6 +40,7 @@ var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 var stdin = require('./plugins/stdin');
 
+opts.address= '192.168.1.4';
 if (opts.help) {
   return console.log([
     '',
