@@ -1,24 +1,6 @@
 #!/usr/bin/env node
 
 var debug = require('debug')('castnow');
-var cors_proxy = require('cors-anywhere');
-var internalIp = require('internal-ip');
-
-if (process.argv.indexOf('--subtitles') > -1){
-    var path = process.argv[2];
-    if (!!path && path.includes('http')) {
-    	var ip = internalIp();
-    	var port = 4321;
-    	cors_proxy.createServer({
-    		originWhitelist: [], // Allow all origins
-    		// requireHeader: ['origin', 'x-requested-with'],
-    		removeHeaders: ['cookie', 'cookie2']
-    	}).listen(port);
-    	debug('started webserver for CORS on address %s using port %s', ip, port);
-    	process.argv[2]='http://' + ip + ':' + port + '/'+ path;
-    }
-}
-
 var player = require('chromecast-player')();
 var opts = require('minimist')(process.argv.slice(2));
 var chalk = require('chalk');
@@ -39,8 +21,8 @@ var torrent = require('./plugins/torrent');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 var stdin = require('./plugins/stdin');
+var proxy = require('./plugins/proxy')(opts);
 
-opts.address= '192.168.1.4';
 if (opts.help) {
   return console.log([
     '',
@@ -91,6 +73,8 @@ if (opts.help) {
   ].join('\n'));
 }
 
+opts.address= '192.168.1.4';
+console.log(opts);
 if (opts._.length) {
   opts.playlist = opts._.map(function(item) {
     return {
