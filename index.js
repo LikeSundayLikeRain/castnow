@@ -22,6 +22,7 @@ var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 var stdin = require('./plugins/stdin');
 var proxy = require('./plugins/proxy')(opts);
+var douyu = require('./plugins/douyu');
 
 if (opts.help) {
   return console.log([
@@ -73,7 +74,7 @@ if (opts.help) {
   ].join('\n'));
 }
 
-opts.address= '192.168.1.4';
+opts.address= '192.168.86.23';
 console.log(opts);
 if (opts._.length) {
   opts.playlist = opts._.map(function(item) {
@@ -393,6 +394,7 @@ player.use(function(ctx, next) {
   next();
 });
 
+player.use(douyu)
 player.use(stdin);
 player.use(directories);
 player.use(torrent);
