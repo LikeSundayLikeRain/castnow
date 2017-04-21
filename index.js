@@ -30,6 +30,7 @@ if (opts.help) {
     'Usage: castnow [<media>, <media>, ...] [OPTIONS]',
     '',
     'Option                   Meaning',
+    '--douyu <url/rid>        Cast video from Douyu TV',
     '--tomp4                  Convert file to mp4 during playback',
     '--device <name>          The name of the Chromecast device that should be used',
     '--address <ip>           The IP address or hostname of your Chromecast device',
@@ -75,7 +76,6 @@ if (opts.help) {
 }
 
 opts.address= '192.168.86.23';
-console.log(opts);
 if (opts._.length) {
   opts.playlist = opts._.map(function(item) {
     return {
