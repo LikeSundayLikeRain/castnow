@@ -56,7 +56,8 @@ var douyu = function (ctx, next) {
   debug('Room ID: %s', rid)
   ctx.options.playlist[0].path = getSourceURL(rid)
   ctx.options.tomp4 = true
-  ctx.options['ffmpeg-vcodec'] = 'copy'
+  ctx.options['ffmpeg-c'] = 'copy'
+  ctx.options['-copyts'] = true
   next();
 }
 
