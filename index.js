@@ -23,6 +23,7 @@ var subtitles = require('./plugins/subtitles');
 var stdin = require('./plugins/stdin');
 var proxy = require('./plugins/proxy')(opts);
 var douyu = require('./plugins/douyu');
+var dnvod = require('./plugins/dnvod');
 
 if (opts.help) {
   return console.log([
@@ -30,6 +31,7 @@ if (opts.help) {
     'Usage: castnow [<media>, <media>, ...] [OPTIONS]',
     '',
     'Option                   Meaning',
+    '--dn <url>               Cast video from Dnvod TV',
     '--douyu <url/rid>        Cast video from Douyu TV',
     '--tomp4                  Convert file to mp4 during playback',
     '--device <name>          The name of the Chromecast device that should be used',
@@ -394,7 +396,8 @@ player.use(function(ctx, next) {
   next();
 });
 
-player.use(douyu)
+player.use(dnvod);
+player.use(douyu);
 player.use(stdin);
 player.use(directories);
 player.use(torrent);
