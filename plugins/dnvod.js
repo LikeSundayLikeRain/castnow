@@ -44,8 +44,7 @@ function getSourceURL(url) {
             return realUrl
         }
         else {
-            debug('Douyu source url resolve failed')
-            debug('HTTP Code: %s', res.statusCode)
+            debug('Dnvod source url resolve failed\nHTTP Code: %s', res.statusCode)
             process.exit()
         }
     }
