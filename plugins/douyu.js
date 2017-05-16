@@ -54,6 +54,11 @@ var douyu = function (ctx, next) {
     var rid = /.*douyu.com\/(\w+)/g.exec(orgPath)[1]
   }
   debug('Room ID: %s', rid)
+  if (isNaN(rid)) {
+    var res = request('GET', orgPath).getBody('utf-8')
+    rid = /room_id=(\d+)/.exec(res)[1]
+    debug('Digital Room ID: %s', rid)
+  }
   ctx.options.playlist[0].path = getSourceURL(rid)
   ctx.options.tomp4 = true
   ctx.options['ffmpeg-c'] = 'copy'
