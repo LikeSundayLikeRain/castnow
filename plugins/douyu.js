@@ -36,10 +36,8 @@ var douyu = function (ctx, next) {
   try {
     if (ctx.mode !== 'launch' || !ctx.options.douyu) return next();
     var orgPath = ctx.options.playlist[0].path;
-    if (/^\d+$/g.test(orgPath)) {
-      var rid = orgPath
-    } else {
-      var rid = /(douyu.com\/)?(\w+)/g.exec(orgPath)[2]
+    var rid = /(.*douyu.com\/)?(\w+)/g.exec(orgPath)[2]
+    if (!/^\d+$/g.test(rid)) {
       var res = request('GET', `https://www.douyu.com/${rid}`).getBody('utf-8')
       rid = /room_id=(\d+)/.exec(res)[1]
     }
