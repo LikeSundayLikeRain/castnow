@@ -21,7 +21,7 @@ var torrent = require('./plugins/torrent');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 var stdin = require('./plugins/stdin');
-var proxy = require('./plugins/proxy')(opts);
+var cors = require('./plugins/cors');
 var douyu = require('./plugins/douyu');
 var dnvod = require('./plugins/dnvod');
 
@@ -396,6 +396,7 @@ player.use(function(ctx, next) {
   next();
 });
 
+player.use(cors)
 player.use(dnvod);
 player.use(douyu);
 player.use(stdin);

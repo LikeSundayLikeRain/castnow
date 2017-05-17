@@ -56,8 +56,7 @@ var douyu = function (ctx, next) {
       }
     }
     ctx.options.tomp4 = true
-    ctx.options['ffmpeg-codec'] = 'copy'
-    ctx.options['ffmpeg-copyts'] = true
+    ctx.options['ffmpeg-c'] = 'copy'
     next();
   } catch (e) {
     debug(e)
