@@ -3,8 +3,12 @@ var debug = require('debug')('castnow:dnvod');
 
 
 function getSourceURL(url) {
+    
+    var res = request('GET', url);
+
     var user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36';
-    var cookies = 'ASP.NET_SessionId=2lqcrdhawwktwghswomwexvx;__cfduid=d72fc02c5d6108da6ccd79f1d52d34cca1489791403; cf_clearance=4e2d13959d91fbe3618272adf861fe9dfcb31d30-1489791563-28800';
+    var cookies = res.headers['set-cookie'].join('; ')
+    console.log(cookies)
     var headers = {
         'User-Agent': user_agent,
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -16,9 +20,7 @@ function getSourceURL(url) {
         'DNT': '1',
         'Cookie': cookies
     };
-    var res = request('GET', url, {
-        headers: headers
-    });
+
     var resbody = res.getBody('utf8');
     var id = /id:.*\'(.*)\',/.exec(resbody)[1];
     if (url.indexOf('Movie') > -1) {
@@ -30,7 +32,10 @@ function getSourceURL(url) {
         process.exit()
     }
     var key = /key:.*\'(.*)\',/.exec(resbody)[1];
-    var body = { 'key': key }
+    debug('id: ' + id + '. key: '+key)
+    var body = {
+        'key': key
+    }
     body = Object.keys(body).map(key => `${key}=${encodeURIComponent(body[key])}`).join('&')
     url = 'http://www.dnvod.tv/' + category + '/GetResource.ashx?id=' + id + '&type=htm';
     try {
@@ -42,14 +47,13 @@ function getSourceURL(url) {
         var realUrl = videoInfo.http.provider;
         if (realUrl) {
             return realUrl
-        }
-        else {
+        } else {
             debug('Dnvod source url resolve failed\nHTTP Code: %s', res.statusCode)
             process.exit()
         }
-    }
-    catch (e) {
+    } catch (e) {
         debug(e)
+        debug(videoInfo)
         process.exit()
     }
 }
