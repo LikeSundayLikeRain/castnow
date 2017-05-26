@@ -24,6 +24,7 @@ var stdin = require('./plugins/stdin');
 var cors = require('./plugins/cors');
 var douyu = require('./plugins/douyu');
 var dnvod = require('./plugins/dnvod');
+var panda = require('./plugins/panda');
 
 if (opts.help) {
   return console.log([
@@ -33,6 +34,7 @@ if (opts.help) {
     'Option                   Meaning',
     '--dn <url>               Cast video from Dnvod TV',
     '--douyu <url/rid>        Cast video from Douyu TV',
+    '--panda <url>            Cast video from Panda TV',
     '--tomp4                  Convert file to mp4 during playback',
     '--device <name>          The name of the Chromecast device that should be used',
     '--address <ip>           The IP address or hostname of your Chromecast device',
@@ -399,6 +401,7 @@ player.use(function(ctx, next) {
 player.use(cors)
 player.use(dnvod);
 player.use(douyu);
+player.use(panda);
 player.use(stdin);
 player.use(directories);
 player.use(torrent);
