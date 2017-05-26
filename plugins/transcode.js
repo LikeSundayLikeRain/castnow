@@ -11,10 +11,12 @@ var transcode = function(ctx, next) {
   var orgPath = ctx.options.playlist[0].path;
   var port = ctx.options['transcode-port'] || 4103;
   var ip = ctx.options.myip || internalIp();
-  ctx.options.playlist[0] = {
-    path: 'http://' + ip + ':' + port,
-    type: 'video/mp4'
-  };
+  ctx.options.playlist[0].path = 'http://' + ip + ':' + port
+  ctx.options.playlist[0].type = 'video/mp4'
+  // ctx.options.playlist[0] = {
+  //   path: 'http://' + ip + ':' + port,
+  //   type: 'video/mp4'
+  // };
   ctx.options.disableTimeline = true;
   ctx.options.disableSeek = true;
   http.createServer(function(req, res) {

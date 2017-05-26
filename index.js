@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+var debug = require('debug')('castnow');
 var player = require('chromecast-player')();
 var opts = require('minimist')(process.argv.slice(2));
 var chalk = require('chalk');
@@ -9,7 +10,6 @@ var circulate = require('array-loop');
 var xtend = require('xtend');
 var shuffle = require('array-shuffle');
 var unformatTime = require('./utils/unformat-time');
-var debug = require('debug')('castnow');
 var debouncedSeeker = require('debounced-seeker');
 var noop = function() {};
 
@@ -21,6 +21,9 @@ var torrent = require('./plugins/torrent');
 var transcode = require('./plugins/transcode');
 var subtitles = require('./plugins/subtitles');
 var stdin = require('./plugins/stdin');
+var cors = require('./plugins/cors');
+var douyu = require('./plugins/douyu');
+var dnvod = require('./plugins/dnvod');
 
 if (opts.help) {
   return console.log([
@@ -28,6 +31,8 @@ if (opts.help) {
     'Usage: castnow [<media>, <media>, ...] [OPTIONS]',
     '',
     'Option                   Meaning',
+    '--dn <url>               Cast video from Dnvod TV',
+    '--douyu <url/rid>        Cast video from Douyu TV',
     '--tomp4                  Convert file to mp4 during playback',
     '--device <name>          The name of the Chromecast device that should be used',
     '--address <ip>           The IP address or hostname of your Chromecast device',
@@ -72,6 +77,7 @@ if (opts.help) {
   ].join('\n'));
 }
 
+opts.address= '192.168.86.23';
 if (opts._.length) {
   opts.playlist = opts._.map(function(item) {
     return {
@@ -390,6 +396,9 @@ player.use(function(ctx, next) {
   next();
 });
 
+player.use(cors)
+player.use(dnvod);
+player.use(douyu);
 player.use(stdin);
 player.use(directories);
 player.use(torrent);
