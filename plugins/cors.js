@@ -6,13 +6,13 @@ var debug = require('debug')('castnow:cors');
 const IP = internalIp();
 const PORT = 4321;
 
-var isFile = function(item) {
+var isFile = function (item) {
   return fs.existsSync(item.path) && fs.statSync(item.path).isFile();
 };
 
 var cors = function (ctx, next) {
-  if (ctx.mode !== 'launch') return next();
-  if (ctx.options.subtitles && !isFile(ctx.options.playlist[0])) {
+  if (ctx.mode !== 'launch' || !ctx.options.cors) return next();
+  if (ctx.options.subtitles && !isFile(ctx.options.playlist[0]) && (ctx.options.playlist[0].path.indexOf('magnet') < 0)) {
     debug('CORS needed, starting server...')
     cors_proxy.createServer({
       originWhitelist: [], // Allow all origins
